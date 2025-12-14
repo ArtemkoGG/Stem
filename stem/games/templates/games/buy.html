@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ game.title }}</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="{% static 'games/css/buy.css' %}?v=10">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 buy-card">
+
+        <div class="row g-4">
+
+            <!-- Картинка зліва -->
+            <div class="col-md-4 d-flex justify-content-center">
+                <img src="{{ game.image.url }}" alt="{{ game.title }}" class="game-img">
+            </div>
+
+            <!-- Інформація справа -->
+            <div class="col-md-8">
+                <h2 class="mb-3">{{ game.title }}</h2>
+
+                <p class="text-secondary">{{ game.description }}</p>
+
+                <p class="price">
+                    {% if game.price == 0 %}
+                        <strong>Безкоштовно</strong>
+                    {% else %}
+                        <strong>{{ game.price }} грн</strong>
+                    {% endif %}
+                </p>
+
+                <div class="mt-4 d-flex gap-3">
+
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'cart:add_to_cart' game.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success px-4">Купити</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}?next={% url 'cart:add_to_cart' game.id %}"
+                           class="btn btn-success px-4">Увійти, щоб купити</a>
+                    {% endif %}
+
+                    <a href="{% url 'games:catalog' %}" class="btn btn-outline-primary px-4">
+                        ⬅ Назад у каталог
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

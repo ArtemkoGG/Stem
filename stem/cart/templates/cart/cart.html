@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Кошик</title>
+    <link rel="stylesheet" href="{% static 'cart/css/cart.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Ваш кошик</h1>
+
+    {% if items %}
+        <ul class="cart-list">
+            {% for item in items %}
+                <li class="cart-item">
+                    <span>{{ item.game.title }}</span>
+                    <span>{{ item.game.price }} грн</span>
+                    <a href="{% url 'cart:remove_from_cart' item.id %}" class="remove-btn">✖</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2>Сума: {{ total_price }} грн</h2>
+
+        <a href="{% url 'cart:confirm' %}" class="buy-btn">Оформити покупку</a>
+    {% else %}
+        <p>Кошик порожній</p>
+    {% endif %}
+
+    <a href="{% url 'games:catalog' %}" class="back-btn">⬅ Назад до каталогу</a>
+</div>
+
+</body>
+</html>

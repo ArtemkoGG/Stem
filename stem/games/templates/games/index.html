@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Stem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'games/css/styles.css' %}">
+</head>
+<body>
+
+<header class="bg-dark text-white text-center py-5">
+    <h1 class="display-4">Stem</h1>
+    <p class="lead">Найкращий онлайн магазин ігор</p>
+    <a href="/catalog" class="btn btn-primary btn-lg mt-3">Каталог Ігор</a>
+
+    <!-- Кнопка тільки для адмінів -->
+    {% if user.is_authenticated and user.is_staff %}
+        <a href="/admin" class="btn btn-warning btn-lg mt-3 ms-2">Панель Адміна</a>
+    {% endif %}
+
+    <a href="{% url 'cart:cart' %}" class="btn btn-success">🛒 Кошик</a>
+
+</header>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-center py-3">
+    {% if user.is_authenticated %}
+        <span class="me-3">Привіт, {{ user.username }}!</span>
+        <form method="post" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-danger">Вийти</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}" class="btn btn-outline-primary me-2">Вхід</a>
+        <a href="{% url 'register' %}" class="btn btn-primary">Реєстрація</a>
+    {% endif %}
+</nav>
+
+</body>
+</html>
